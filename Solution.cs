@@ -21,7 +21,6 @@ namespace Cube002
 
             // First layer
             SolveWhiteCross();
-            SolveWhiteCorners();
 
             // Second layer
             SolveMiddleLayerEdges();
@@ -34,65 +33,7 @@ namespace Cube002
             // TODO
         }
 
-        private void SolveWhiteCorners()
-        {
-            Dictionary<string, int> pieceDestinations = new Dictionary<string, int>();
-            pieceDestinations.Add("WRG", map["UFR"]);
-            pieceDestinations.Add("WBR", map["UBR"]);
-            pieceDestinations.Add("WOB", map["UBL"]);
-            pieceDestinations.Add("WGO", map["UFL"]);
-
-            foreach( var target in pieceDestinations )
-            {
-                SolveWhiteCornerPiece(target.Key, target.Value);
-            }
-        }
-        private void SolveWhiteCornerPiece(string piece, int destinationSquare, List<Move> prepMoves = null)
-        {
-            List<Move> algorithmMoves = new List<Move>();
-
-            if (!(prepMoves is null))
-            {
-                algorithmMoves.AddRange(prepMoves);
-            }
-
-            // If white isn't down, rotate until it is
-
-
-            // Rotate x until piece is in UFR or UFD
-
-
-            bool isInTopLayer = false;
-            bool isSolved = false;
-
-            if( isInTopLayer)
-            {
-                // Do U moves until it's above target position
-
-                // Do x rotations until target position is in FDR and piece is in FUR
-
-                // Repeat R U R' U' until piece is solved
-            }
-
-            else
-            {
-                // Piece in bottom layer
-
-                if( isSolved )
-                {
-                    // Do nothing
-                }
-                else
-                {
-                    // Do R U R' U' to move piece to bottom layer
-
-                    // Call this function recursively
-                }
-            }
-
-
-        }
-
+        
         public override string ToString()
         {
             return string.Join(' ', moveList);
@@ -107,10 +48,10 @@ namespace Cube002
         private void SolveWhiteCross()
         {
             Dictionary<string, int> pieceDestinations = new Dictionary<string, int>();
-            pieceDestinations.Add("WG", map["UF"]);
-            pieceDestinations.Add("WR", map["UR"]);
-            pieceDestinations.Add("WB", map["UB"]);
-            pieceDestinations.Add("WO", map["UL"]);
+            pieceDestinations.Add("WG", Square.UF.Index);
+            pieceDestinations.Add("WR", Square.UR.Index);
+            pieceDestinations.Add("WB", Square.UB.Index);
+            pieceDestinations.Add("WO", Square.UL.Index);
 
             foreach( var pair in pieceDestinations)
             {
@@ -138,7 +79,7 @@ namespace Cube002
             int pieceSquare = cube.FindPiece(piece);
 
             // Prep: Rotate cube so white is U and the side being solved is F
-            while( ! IndexMap.IsSamePiece( map["F"], cube.FindPiece(destinationSide)))
+            while (!Square.IsSamePiece(Square.F, Square.GetSquare(cube.FindPiece(destinationSide))))
             {
                 move = new Move("y");
                 algorithmMoves.Add(move);
@@ -158,7 +99,7 @@ namespace Cube002
 
 
                 // Rotate D to put target below destination center square
-                while (!IndexMap.IsSamePiece(map["FD"], cube.FindPiece(piece)))
+                while( !Square.IsSamePiece(Square.FD, Square.GetSquare(cube.FindPiece(piece))))
                 {
                     move = new Move("D");
                     algorithmMoves.Add(move);
@@ -187,7 +128,7 @@ namespace Cube002
             else if( isInMiddleLayer )
             {
                 // Rotate cube so white is U and piece is in FR slot
-                while (!IndexMap.IsSamePiece(map["FR"], cube.FindPiece(piece)))
+                while( !Square.IsSamePiece(Square.FR,Square.GetSquare(cube.FindPiece(piece))))
                 {
                     move = new Move("y");
                     algorithmMoves.Add(move);
@@ -227,7 +168,7 @@ namespace Cube002
             else
             {
                 // Rotate cube so piece is in UF position
-                while (!IndexMap.IsSamePiece(map["UF"], cube.FindPiece(piece)))
+                while (!Square.IsSamePiece(Square.UF, Square.GetSquare(cube.FindPiece(piece))))
                 {
                     move = new Move("y");
                     algorithmMoves.Add(move);

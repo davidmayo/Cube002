@@ -29,7 +29,7 @@ namespace Cube002
             Console.WriteLine("SOLUTION: {0}", sol);
             Console.WriteLine("TIME: {0}", watch.Elapsed);
 
-
+            return;
             var list = Square.AllSquares;
 
             foreach( var square in list )

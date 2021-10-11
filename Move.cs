@@ -6,98 +6,105 @@ namespace Cube002
 {
     class Move
     {
-        public List<int[]> Cycles { get => cycles; }
-        private IndexMap map;
+        public List<Square[]> Cycles { get => cycles; }
+
         private string moveString;
 
         // Face turns
-        private static List<int[]> R_face;
-        private static List<int[]> U_face;
-        private static List<int[]> F_face;
-        private static List<int[]> L_face;
-        private static List<int[]> D_face;
-        private static List<int[]> B_face;
-        
-        // Slice turns
-        private static List<int[]> M_slice;
-        private static List<int[]> E_slice;
-        private static List<int[]> S_slice;
+        private static List<Square[]> faceR;
+        private static List<Square[]> faceU;
+        private static List<Square[]> faceF;
+        private static List<Square[]> faceL;
+        private static List<Square[]> faceD;
+        private static List<Square[]> faceB;
 
-        private static List<int[]> nullMove;
+
+        // Slice turns
+        private static List<Square[]> sliceM;
+        private static List<Square[]> sliceE;
+        private static List<Square[]> sliceS;
+
+        private List<Square[]> cycles;
+
+        public Move(string moveString)
+        {
+            //cycles = new List<int[]>();
+            cycles = new List<Square[]>();
+            this.moveString = moveString;
+
+
+            InitializeBaseMoves();
+            ProcessMultipleMoveString(moveString);
+        }
 
         private void InitializeBaseMoves()
         {
-            R_face = new List<int[]>() {
-                new int[]{ map["RUF"], map["RUB"], map["RDB"], map["RDF"] }, // Face corners
-                new int[]{ map["RU" ], map["RB" ], map["RD" ], map["RF" ] }, // Face edges
-                new int[]{ map["URF"], map["BUR"], map["DBR"], map["FRD"] }, // Adjacent corners map["UB"]
-                new int[]{ map["UBR"], map["BDR"], map["DFR"], map["FUR"] }, // Adjacent corners map["UBR"]
-                new int[]{ map["FR" ], map["UR" ], map["BR" ], map["DR" ] }  // Adjacent edges
+            faceR = new List<Square[]>()
+            {
+                new Square[]{ Square.RUF, Square.RUB, Square.RDB, Square.RDF }, // Face corners
+                new Square[]{ Square.RU,  Square.RB,  Square.RD,  Square.RF  }, // Face edges
+                new Square[]{ Square.URF, Square.BUR, Square.DBR, Square.FRD }, // Adjacent corners 1
+                new Square[]{ Square.UBR, Square.BDR, Square.DFR, Square.FUR }, // Adjacent corners 2
+                new Square[]{ Square.FR,  Square.UR,  Square.BR,  Square.DR  }  // Adjacent edges
+            };
+            
+            faceU = new List<Square[]>() {
+                new Square[]{ Square.UBL, Square.UBR, Square.URF, Square.UFL }, // Face corners
+                new Square[]{ Square.UB,  Square.UR,  Square.UF,  Square.UL  }, // Face edges
+                new Square[]{ Square.FUL, Square.LUB, Square.BUR, Square.RUF }, // Adjacent corners 1
+                new Square[]{ Square.FUR, Square.LUF, Square.BUL, Square.RUB }, // Adjacent corners 2
+                new Square[]{ Square.FU,  Square.LU,  Square.BU,  Square.RU  }  // Adjacent edges
             };
 
-            U_face = new List<int[]>() {
-                new int[]{ map["UBL"], map["UBR"], map["URF"], map["UFL"] }, // Face corners
-                new int[]{ map["UB" ], map["UR" ], map["UF" ], map["UL" ] }, // Face edges
-                new int[]{ map["FUL"], map["LUB"], map["BUR"], map["RUF"] }, // Adjacent corners map["UB"]
-                new int[]{ map["FUR"], map["LUF"], map["BUL"], map["RUB"] }, // Adjacent corners map["UBR"]
-                new int[]{ map["FU" ], map["LU" ], map["BU" ], map["RU" ] }  // Adjacent edges
+            faceF = new List<Square[]>() {
+                new Square[]{ Square.FUL, Square.FUR, Square.FRD, Square.FDL }, // Face corners
+                new Square[]{ Square.FU,  Square.FR,  Square.FD,  Square.FL  }, // Face edges
+                new Square[]{ Square.UFL, Square.RUF, Square.DFR, Square.LDF }, // Adjacent corners 1
+                new Square[]{ Square.URF, Square.RDF, Square.DFL, Square.LUF }, // Adjacent corners 2
+                new Square[]{ Square.UF,  Square.RF,  Square.DF,  Square.LF  }  // Adjacent edges
             };
 
-            F_face = new List<int[]>() {
-                new int[]{ map["FUL"], map["FUR"], map["FRD"], map["FDL"] }, // Face corners
-                new int[]{ map["FU" ], map["FR" ], map["FD" ], map["FL" ] }, // Face edges
-                new int[]{ map["UFL"], map["RUF"], map["DFR"], map["LDF"] }, // Adjacent corners map["UB"]
-                new int[]{ map["URF"], map["RDF"], map["DFL"], map["LUF"] }, // Adjacent corners map["UBR"]
-                new int[]{ map["UF" ], map["RF" ], map["DF" ], map["LF" ] }  // Adjacent edges
+            faceL = new List<Square[]>() {
+                new Square[]{ Square.LUB, Square.LUF, Square.LDF, Square.LDB }, // Face corners
+                new Square[]{ Square.LU,  Square.LF,  Square.LD,  Square.LB  }, // Face edges
+                new Square[]{ Square.UBL, Square.FUL, Square.DFL, Square.BDL }, // Adjacent corners 1
+                new Square[]{ Square.UFL, Square.FDL, Square.DBL, Square.BUL }, // Adjacent corners 2
+                new Square[]{ Square.UL,  Square.FL,  Square.DL,  Square.BL  }  // Adjacent edges
+            };
+            faceD = new List<Square[]>() {
+                new Square[]{ Square.DFR, Square.DBR, Square.DBL, Square.DFL }, // Face corners
+                new Square[]{ Square.DF,  Square.DR,  Square.DB,  Square.DL  }, // Face edges
+                new Square[]{ Square.FDL, Square.RDF, Square.BDR, Square.LDB }, // Adjacent corners 1
+                new Square[]{ Square.FRD, Square.RDB, Square.BDL, Square.LDF }, // Adjacent corners 2
+                new Square[]{ Square.FD,  Square.RD,  Square.BD,  Square.LD  }  // Adjacent edges
+            };
+            faceB = new List<Square[]>() {
+                new Square[]{ Square.BUR, Square.BUL, Square.BDL, Square.BDR }, // Face corners
+                new Square[]{ Square.BU,  Square.BL,  Square.BD,  Square.BR  }, // Face edges
+                new Square[]{ Square.UBL, Square.LDB, Square.DBR, Square.RUB }, // Adjacent corners 1
+                new Square[]{ Square.UBR, Square.LUB, Square.DBL, Square.RDB }, // Adjacent corners 2
+                new Square[]{ Square.UB,  Square.LB,  Square.DB,  Square.RB  }  // Adjacent edges
             };
 
-            L_face = new List<int[]>() {
-                new int[]{ map["LUB"], map["LUF"], map["LDF"], map["LDB"] }, // Face corners
-                new int[]{ map["LU" ], map["LF" ], map["LD" ], map["LB" ] }, // Face edges
-                new int[]{ map["UBL"], map["FUL"], map["DFL"], map["BDL"] }, // Adjacent corners map["UB"]
-                new int[]{ map["UFL"], map["FDL"], map["DBL"], map["BUL"] }, // Adjacent corners map["UBR"]
-                new int[]{ map["UL" ], map["FL" ], map["DL" ], map["BL" ] }  // Adjacent edges
+            sliceM = new List<Square[]>() {
+                new Square[]{ Square.U,   Square.F,   Square.D,   Square.B   }, // Slice centers
+                new Square[]{ Square.UB,  Square.FU,  Square.DF,  Square.BD  }, // Slice edges 1
+                new Square[]{ Square.UF,  Square.FD,  Square.DB,  Square.BU  }  // Slice edges 2
             };
 
-            D_face = new List<int[]>() {
-                new int[]{ map["DFR"], map["DBR"], map["DBL"], map["DFL"] }, // Face corners
-                new int[]{ map["DF" ], map["DR" ], map["DB" ], map["DL" ] }, // Face edges
-                new int[]{ map["FDL"], map["RDF"], map["BDR"], map["LDB"] }, // Adjacent corners map["UB"]
-                new int[]{ map["FRD"], map["RDB"], map["BDL"], map["LDF"] }, // Adjacent corners map["UBR"]
-                new int[]{ map["FD" ], map["RD" ], map["BD" ], map["LD" ] }  // Adjacent edges
+            sliceE = new List<Square[]>() {
+                new Square[]{ Square.F,   Square.R,   Square.B,   Square.L   }, // Slice centers
+                new Square[]{ Square.FL,  Square.RF,  Square.BR,  Square.LB  }, // Slice edges 1
+                new Square[]{ Square.FR,  Square.RB,  Square.BL,  Square.LF  }  // Slice edges 2
             };
 
-            B_face = new List<int[]>() {
-                new int[]{ map["BUR"], map["BUL"], map["BDL"], map["BDR"] }, // Face corners
-                new int[]{ map["BU" ], map["BL" ], map["BD" ], map["BR" ] }, // Face edges
-                new int[]{ map["UBL"], map["LDB"], map["DBR"], map["RUB"] }, // Adjacent corners map["UB"]
-                new int[]{ map["UBR"], map["LUB"], map["DBL"], map["RDB"] }, // Adjacent corners map["UBR"]
-                new int[]{ map["UB" ], map["LB" ], map["DB" ], map["RB" ] }  // Adjacent edges
+            sliceS = new List<Square[]>() {
+                new Square[]{  Square.U,   Square.R,   Square.D,   Square.L   }, // Slice centers
+                new Square[]{  Square.UL,  Square.RU,  Square.DR,  Square.LD  }, // Slice edges 1
+                new Square[]{  Square.UR,  Square.RD,  Square.DL,  Square.LU  }  // Slice edges 2
             };
-
-            M_slice = new List<int[]>() {
-                new int[]{ map["U"  ], map["F"  ], map["D"  ], map["B"  ] }, // Equator centers
-                new int[]{ map["UB" ], map["FU" ], map["DF" ], map["BD" ] }, // Equator edges map["UB"]
-                new int[]{ map["UF" ], map["FD" ], map["DB" ], map["BU" ] }  // Equator edges map["UBR"]
-            };
-
-            E_slice = new List<int[]>() {
-                new int[]{ map["F"  ], map["R"  ], map["B"  ], map["L"  ] }, // Equator centers
-                new int[]{ map["FL" ], map["RF" ], map["BR" ], map["LB" ] }, // Equator edges map["UB"]
-                new int[]{ map["FR" ], map["RB" ], map["BL" ], map["LF" ] }  // Equator edges map["UBR"]
-            };
-
-            S_slice = new List<int[]>() {
-                new int[]{  map["U"  ], map["R"  ], map["D"  ], map["L"  ] }, // Equator centers
-                new int[]{  map["UL" ], map["RU" ], map["DR" ], map["LD" ] }, // Equator edges map["UB"]
-                new int[]{  map["UR" ], map["RD" ], map["DL" ], map["LU" ] }  // Equator edges map["UBR"]
-            };
-
-            // Null move (do nothing)
-            nullMove = new List<int[]>() {};
         }
 
-        private List<int[]> cycles;
 
         private void ProcessMultipleMoveString( string movesString )
         {
@@ -113,165 +120,170 @@ namespace Cube002
             return moveString;
         }
 
+        
         private void ProcessSingleMoveString( string singleMove )
         {
             // Null move
-            if( string.IsNullOrEmpty(singleMove))
+            if ( string.IsNullOrEmpty(singleMove))
             {
-                cycles.AddRange(nullMove);
+                return;
             }
 
             // Right face moves
-            else if (singleMove == "R")
+            if (singleMove == "R")
             {
-                cycles.AddRange(R_face);
+                cycles.AddRange(faceR);
             }
             else if (singleMove == "R2")
             {
-                cycles.AddRange(R_face);
-                cycles.AddRange(R_face);
+                cycles.AddRange(faceR);
+                cycles.AddRange(faceR);
             }
-            else if ( singleMove == "R'" )
+            else if (singleMove == "R'")
             {
-                cycles.AddRange(R_face);
-                cycles.AddRange(R_face);
-                cycles.AddRange(R_face);
+                cycles.AddRange(faceR);
+                cycles.AddRange(faceR);
+                cycles.AddRange(faceR);
             }
 
             // Left face moves
-            else if ( singleMove == "L")
+            else if (singleMove == "L")
             {
-                cycles.AddRange(L_face);
+                cycles.AddRange(faceL);
             }
-            else if ( singleMove == "L2")
+            else if (singleMove == "L2")
             {
-                cycles.AddRange(L_face);
-                cycles.AddRange(L_face);
+                cycles.AddRange(faceL);
+                cycles.AddRange(faceL);
             }
-            else if ( singleMove == "L'")
+            else if (singleMove == "L'")
             {
-                cycles.AddRange(L_face);
-                cycles.AddRange(L_face);
-                cycles.AddRange(L_face);
+                cycles.AddRange(faceL);
+                cycles.AddRange(faceL);
+                cycles.AddRange(faceL);
             }
 
             // Up face moves
-            else if ( singleMove == "U")
+            else if (singleMove == "U")
             {
-                cycles.AddRange(U_face);
+                cycles.AddRange(faceU);
             }
-            else if ( singleMove == "U2")
+            else if (singleMove == "U2")
             {
-                cycles.AddRange(U_face);
-                cycles.AddRange(U_face);
+                cycles.AddRange(faceU);
+                cycles.AddRange(faceU);
             }
-            else if ( singleMove == "U'")
+            else if (singleMove == "U'")
             {
-                cycles.AddRange(U_face);
-                cycles.AddRange(U_face);
-                cycles.AddRange(U_face);
+                cycles.AddRange(faceU);
+                cycles.AddRange(faceU);
+                cycles.AddRange(faceU);
             }
 
             // Down face moves
-            else if ( singleMove == "D")
+            else if (singleMove == "D")
             {
-                cycles.AddRange(D_face);
+                cycles.AddRange(faceD);
             }
-            else if ( singleMove == "D2")
+            else if (singleMove == "D2")
             {
-                cycles.AddRange(D_face);
-                cycles.AddRange(D_face);
+                cycles.AddRange(faceD);
+                cycles.AddRange(faceD);
             }
-            else if ( singleMove == "D'")
+            else if (singleMove == "D'")
             {
-                cycles.AddRange(D_face);
-                cycles.AddRange(D_face);
-                cycles.AddRange(D_face);
+                cycles.AddRange(faceD);
+                cycles.AddRange(faceD);
+                cycles.AddRange(faceD);
             }
 
             // Front face moves
-            else if ( singleMove == "F")
+            else if (singleMove == "F")
             {
-                cycles.AddRange(F_face);
+                cycles.AddRange(faceF);
             }
-            else if ( singleMove == "F2")
+            else if (singleMove == "F2")
             {
-                cycles.AddRange(F_face);
-                cycles.AddRange(F_face);
+                cycles.AddRange(faceF);
+                cycles.AddRange(faceF);
             }
-            else if ( singleMove == "F'")
+            else if (singleMove == "F'")
             {
-                cycles.AddRange(F_face);
-                cycles.AddRange(F_face);
-                cycles.AddRange(F_face);
+                cycles.AddRange(faceF);
+                cycles.AddRange(faceF);
+                cycles.AddRange(faceF);
             }
 
             // Back face moves
             else if (singleMove == "B")
             {
-                cycles.AddRange(B_face);
+                cycles.AddRange(faceB);
             }
             else if (singleMove == "B2")
             {
-                cycles.AddRange(B_face);
-                cycles.AddRange(B_face);
+                cycles.AddRange(faceB);
+                cycles.AddRange(faceB);
             }
             else if (singleMove == "B'")
             {
-                cycles.AddRange(B_face);
-                cycles.AddRange(B_face);
-                cycles.AddRange(B_face);
+                cycles.AddRange(faceB);
+                cycles.AddRange(faceB);
+                cycles.AddRange(faceB);
             }
 
             // M slice move
             else if (singleMove == "M")
             {
-                cycles.AddRange(M_slice);
+                cycles.AddRange(sliceM);
             }
             else if (singleMove == "M2")
             {
-                cycles.AddRange(M_slice);
-                cycles.AddRange(M_slice);
+                cycles.AddRange(sliceM);
+                cycles.AddRange(sliceM);
             }
             else if (singleMove == "M'")
             {
-                cycles.AddRange(M_slice);
-                cycles.AddRange(M_slice);
-                cycles.AddRange(M_slice);
+                cycles.AddRange(sliceM);
+                cycles.AddRange(sliceM);
+                cycles.AddRange(sliceM);
             }
 
             // E slice move
             else if (singleMove == "E")
             {
-                cycles.AddRange(E_slice);
+                cycles.AddRange(sliceE);
+
             }
             else if (singleMove == "E2")
             {
-                cycles.AddRange(E_slice);
-                cycles.AddRange(E_slice);
+                cycles.AddRange(sliceE);
+                cycles.AddRange(sliceE);
+
             }
             else if (singleMove == "E'")
             {
-                cycles.AddRange(E_slice);
-                cycles.AddRange(E_slice);
-                cycles.AddRange(E_slice);
+                cycles.AddRange(sliceE);
+                cycles.AddRange(sliceE);
+                cycles.AddRange(sliceE);
+
             }
 
             // S slice move
             else if (singleMove == "S")
             {
-                cycles.AddRange(S_slice);
+                cycles.AddRange(sliceS);
             }
             else if (singleMove == "S2")
             {
-                cycles.AddRange(S_slice);
-                cycles.AddRange(S_slice);
+                cycles.AddRange(sliceS);
+                cycles.AddRange(sliceS);
+
             }
             else if (singleMove == "S'")
             {
-                cycles.AddRange(S_slice);
-                cycles.AddRange(S_slice);
-                cycles.AddRange(S_slice);
+                cycles.AddRange(sliceS);
+                cycles.AddRange(sliceS);
+                cycles.AddRange(sliceS);
             }
 
             // X cube rotation
@@ -299,7 +311,7 @@ namespace Cube002
                 ProcessMultipleMoveString("F' S' B");
 
             // r wide slice move
-            else if( singleMove == "r")
+            else if (singleMove == "r")
                 ProcessMultipleMoveString("R M'");
             else if (singleMove == "r2")
                 ProcessMultipleMoveString("R2 M2");
@@ -351,15 +363,6 @@ namespace Cube002
                 throw new ArgumentException("Invalid or unsupported move [" + singleMove + "].");
             }
         }
-        public Move(string moveString)
-        {
-            cycles = new List<int[]>();
-            map = new IndexMap();
-            this.moveString = moveString;
-
-
-            InitializeBaseMoves();
-            ProcessMultipleMoveString(moveString);
-        }
+        
     }
 }

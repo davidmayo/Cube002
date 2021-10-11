@@ -133,48 +133,91 @@ namespace Cube002
             throw new Exception("Could not find piece [" + pieceString + "].");
         }
 
-        public void CycleSquares( params int[] indexes)
+        public void CycleSquares(params Square[] cycleSquares)
         {
-            if(indexes is null)
-            {
+            // if null, do nothing
+            if (cycleSquares is null)
                 return;
-            }
 
             // If 0 or 1, do nothing
-            if( indexes.Length <= 1)
-            {
+            if (cycleSquares.Length <= 1)
                 return;
-            }
 
 
-            int count = indexes.Length;
+            int count = cycleSquares.Length;
             int sourceIndex;
             int destinationIndex;
 
             // Create a temp one from the end of the indexes
-            destinationIndex = indexes[count - 1];
-            char tempChar = squares[destinationIndex];
+            destinationIndex = cycleSquares[count - 1].Index;
+            char tempChar = this.squares[destinationIndex];
 
             // Iterate over squares
-            for( int i = count - 2; i >= 0; i-- )
+            // In REVERSE order, "pushing" forward
+            for (int i = count - 2; i >= 0; i--)
             {
-                sourceIndex = indexes[i];
-                destinationIndex = indexes[i + 1];
+                sourceIndex = cycleSquares[i].Index;
+                destinationIndex = cycleSquares[i + 1].Index;
 
-                squares[destinationIndex] = squares[sourceIndex];
+                this.squares[destinationIndex] = this.squares[sourceIndex];
             }
 
             // Copy temp into the first one
-            destinationIndex = indexes[0];
+            destinationIndex = cycleSquares[0].Index;
 
-            squares[destinationIndex] = tempChar;
+            this.squares[destinationIndex] = tempChar;
         }
+
+        //public void CycleSquares( params int[] indexes)
+        //{
+        //    if(indexes is null)
+        //    {
+        //        return;
+        //    }
+        //
+        //    // If 0 or 1, do nothing
+        //    if( indexes.Length <= 1)
+        //    {
+        //        return;
+        //    }
+        //
+        //
+        //    int count = indexes.Length;
+        //    int sourceIndex;
+        //    int destinationIndex;
+        //
+        //    // Create a temp one from the end of the indexes
+        //    destinationIndex = indexes[count - 1];
+        //    char tempChar = squares[destinationIndex];
+        //
+        //    // Iterate over squares
+        //    for( int i = count - 2; i >= 0; i-- )
+        //    {
+        //        sourceIndex = indexes[i];
+        //        destinationIndex = indexes[i + 1];
+        //
+        //        squares[destinationIndex] = squares[sourceIndex];
+        //    }
+        //
+        //    // Copy temp into the first one
+        //    destinationIndex = indexes[0];
+        //
+        //    squares[destinationIndex] = tempChar;
+        //}
 
         public void MakeMove( Move move )
         {
             MakeMove(move.Cycles);
         }
-        public void MakeMove( List<int[]> cycles )
+        //public void MakeMove( List<int[]> cycles )
+        //{
+        //    if (cycles is null)
+        //        return;
+        //    foreach (var cycle in cycles)
+        //        CycleSquares(cycle);
+        //}
+
+        public void MakeMove(List<Square[]> cycles)
         {
             if (cycles is null)
                 return;
@@ -185,8 +228,7 @@ namespace Cube002
         public void MakeMove(string moveString)
         {
             Move move = new Move(moveString);
-            var cycles = move.Cycles;
-            ;
+            
             foreach (var cycle in move.Cycles)
                 CycleSquares(cycle);
         }
