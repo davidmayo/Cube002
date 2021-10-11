@@ -9,7 +9,6 @@ namespace Cube002
     {
         public char[] Squares { get; }
         private char[] squares;
-        private IndexMap map;
 
         private static readonly string solvedPositionCanonicalString = "WWWWWWWWW/GGGGGGGGG/RRRRRRRRR/BBBBBBBBB/OOOOOOOOO/YYYYYYYYY";
 
@@ -19,121 +18,87 @@ namespace Cube002
 
         public Cube( string canonicalString)
         {
-            map = new IndexMap();
-
             ProcessCanonicalString(canonicalString);
         }
 
-        /// <summary>
-        /// Find the given piece. The index returned will be the square index of the FIRST character of the piece
-        /// </summary>
-        /// <param name="pieceString">A string like "WBR" representing </param>
-        /// <returns></returns>
-        public int FindPiece(string pieceString)
+        public Square FindPieceSquare( string pieceString )
         {
             if (string.IsNullOrEmpty(pieceString))
                 throw new ArgumentException("Piece string was empty.");
             if (pieceString.Length == 1)
-                return FindCenterPiece(pieceString);
+                return FindCenterPieceSquare(pieceString);
             else if (pieceString.Length == 2)
-                return FindEdgePiece(pieceString);
+                return FindEdgePieceSquare(pieceString);
             else if (pieceString.Length == 3)
-                return FindCornerPiece(pieceString);
+                return FindCornerPieceSquare(pieceString);
 
             throw new ArgumentException("Piece string was wrong size.");
         }
 
-        private int FindCornerPiece(string pieceString)
+        private Square FindCornerPieceSquare(string pieceString)
         {
-            var cornerSquares = IndexMap.Corners;
+            List<Square> cornerSquares = Square.AllCornerSquares;
 
-            foreach (int cornerSquare in cornerSquares)
+            // Loop over edge squares
+            foreach (Square cornerSquare in cornerSquares)
             {
-                var thisCornerSquareIndexes = IndexMap.GetSquaresFromIndex(cornerSquare);
-                if (squares[thisCornerSquareIndexes[0]] == pieceString[0] &&
-                    squares[thisCornerSquareIndexes[1]] == pieceString[1] &&
-                    squares[thisCornerSquareIndexes[2]] == pieceString[2])
+                if (squares[cornerSquare] == pieceString[0])
                 {
-                    return thisCornerSquareIndexes[0];
-                }
+                    // If we find the primary face color, Check the other face on that piece
+                    var otherEdgeSquares = cornerSquare.GetOtherPieceSquares();
 
+                    // if the other faces on that piece match the other face colors,
+                    // We've found it.
+                    // Check both orders
+                    if (squares[otherEdgeSquares[0]] == pieceString[1] && squares[otherEdgeSquares[1]] == pieceString[2])
+                        return cornerSquare;
+                    else if (squares[otherEdgeSquares[0]] == pieceString[2] && squares[otherEdgeSquares[1]] == pieceString[1])
+                        return cornerSquare;
+                }
             }
+
+            // If we didn't find it in the loop, throw an exception
             throw new Exception("Could not find piece [" + pieceString + "].");
         }
 
-
-        private int FindEdgePiece(string pieceString)
+        private Square FindEdgePieceSquare(string pieceString)
         {
-            var edgeSquares = IndexMap.Edges;
+            List<Square> edgeSquares = Square.AllEdgeSquares;
 
-            foreach (int edgeSquare in edgeSquares)
+            // Loop over edge squares
+            foreach (Square edgeSquare in edgeSquares)
             {
-                var thisEdgeSquareIndexes = IndexMap.GetSquaresFromIndex(edgeSquare);
-
-                if( squares[thisEdgeSquareIndexes[0]] == pieceString[0] &&
-                    squares[thisEdgeSquareIndexes[1]] == pieceString[1] )
+                if (squares[edgeSquare] == pieceString[0])
                 {
-                    return thisEdgeSquareIndexes[0];
+                    // If we find the primary face color, Check the other face on that piece
+                    var otherEdgeSquares = edgeSquare.GetOtherPieceSquares();
+
+                    // if the other face on that piece matches the other face color,
+                    // We've found it
+                    if( squares[otherEdgeSquares[0]] == pieceString[1])
+                        return edgeSquare;
                 }
-                
             }
+
+            // If we didn't find it in the loop, throw an exception
             throw new Exception("Could not find piece [" + pieceString + "].");
         }
 
-        //public void RotateToStandardPosition()
-        //{
-        //    int whiteSquare = FindPiece("W");
-        //    if (whiteSquare == map["U"])
-        //    {
-        //        // Do nothing
-        //    }
-        //    else if (whiteSquare == map["F"])
-        //        MakeMove("x");
-        //    else if (whiteSquare == map["R"])
-        //        MakeMove("z'");
-        //    else if (whiteSquare == map["B"])
-        //        MakeMove("x'");
-        //    else if (whiteSquare == map["L"])
-        //        MakeMove("z");
-        //    else if (whiteSquare == map["D"])
-        //        MakeMove("x2");
-        //    else
-        //        throw new Exception("Unable to find white center.");    // SHould never happen - FindPiece() would have thrown.
-        //
-        //    int greenSquare = FindPiece("G");
-        //    if (greenSquare == map["F"])
-        //    {
-        //        // Do nothing
-        //    }
-        //    else if (greenSquare == map["R"])
-        //        MakeMove("y");
-        //    else if (greenSquare == map["B"])
-        //        MakeMove("y2");
-        //    else if (greenSquare == map["L"])
-        //        MakeMove("y'");
-        //    else if (greenSquare == map["D"])
-        //        throw new Exception("Green center can't be down if white is up.");
-        //    else if (greenSquare == map["U"])
-        //        throw new Exception("Green center can't be up if white is up.");
-        //    else
-        //        throw new Exception("Unable to find green center.");    // Should never happen - FindPiece() would have thrown.
-        //
-        //
-        //}
-
-        private int FindCenterPiece(string pieceString)
+        public Square FindCenterPieceSquare(string pieceString)
         {
-            var centerSquares = IndexMap.Centers;
+            List<Square> centerSquares = Square.AllCenterSquares;
 
-            foreach( int centerSquare in centerSquares )
+            foreach (Square centerSquare in centerSquares)
             {
                 if (squares[centerSquare] == pieceString[0])
                     return centerSquare;
             }
+
+            // If we didn't find it in the loop, throw an exception
             throw new Exception("Could not find piece [" + pieceString + "].");
         }
 
-        public void CycleSquares(params Square[] cycleSquares)
+        private void CycleSquares(params Square[] cycleSquares)
         {
             // if null, do nothing
             if (cycleSquares is null)
@@ -168,56 +133,12 @@ namespace Cube002
             this.squares[destinationIndex] = tempChar;
         }
 
-        //public void CycleSquares( params int[] indexes)
-        //{
-        //    if(indexes is null)
-        //    {
-        //        return;
-        //    }
-        //
-        //    // If 0 or 1, do nothing
-        //    if( indexes.Length <= 1)
-        //    {
-        //        return;
-        //    }
-        //
-        //
-        //    int count = indexes.Length;
-        //    int sourceIndex;
-        //    int destinationIndex;
-        //
-        //    // Create a temp one from the end of the indexes
-        //    destinationIndex = indexes[count - 1];
-        //    char tempChar = squares[destinationIndex];
-        //
-        //    // Iterate over squares
-        //    for( int i = count - 2; i >= 0; i-- )
-        //    {
-        //        sourceIndex = indexes[i];
-        //        destinationIndex = indexes[i + 1];
-        //
-        //        squares[destinationIndex] = squares[sourceIndex];
-        //    }
-        //
-        //    // Copy temp into the first one
-        //    destinationIndex = indexes[0];
-        //
-        //    squares[destinationIndex] = tempChar;
-        //}
-
         public void MakeMove( Move move )
         {
             MakeMove(move.Cycles);
         }
-        //public void MakeMove( List<int[]> cycles )
-        //{
-        //    if (cycles is null)
-        //        return;
-        //    foreach (var cycle in cycles)
-        //        CycleSquares(cycle);
-        //}
 
-        public void MakeMove(List<Square[]> cycles)
+        private void MakeMove(List<Square[]> cycles)
         {
             if (cycles is null)
                 return;

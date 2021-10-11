@@ -390,6 +390,29 @@ namespace Cube002
             return IsSamePiece(this, otherSquare);
         }
 
+        /// <summary>
+        /// Get all other squares on a piece EXCLUDING the given square
+        /// </summary>
+        /// <param name="square"></param>
+        /// <returns></returns>
+        public static List<Square> GetOtherPieceSquares(Square square)
+        {
+            List<Square> rv =  GetAllPieceSquares(square);
+
+            rv.Remove(square);
+
+            return rv;
+        }
+
+        /// <summary>
+        /// Get all other squares on a piece EXCLUDING this square.
+        /// </summary>
+        /// <returns></returns>
+        public List<Square> GetOtherPieceSquares()
+        {
+            return GetOtherPieceSquares(this);
+        }
+
         public List<Square> GetAllPieceSquares()
         {
             return GetAllPieceSquares(this);

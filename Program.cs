@@ -5,12 +5,12 @@ using System.Diagnostics;
 
 namespace Cube002
 {
-    class TestPlayground
+    class Program
     {
         static void Main()
         {
             //string position = "XXXXYXXXX/XXXXRXRRR/XXXXGXGGG/XXXXOXOOO/XXXXBXBBB/WWWWWWWWW";
-            string scramble = "U L2 B2 D L2 B' R2 B' D L' B";
+            string scramble = "U L2 B2 D L2 B' R2 B' D L' B x y z";
             //Cube cube = new Cube(position);
             Cube cube = new Cube();
 
@@ -28,6 +28,8 @@ namespace Cube002
 
             Console.WriteLine("SOLUTION: {0}", sol);
             Console.WriteLine("TIME: {0}", watch.Elapsed);
+
+            Console.WriteLine("G location: {0}",cube.FindPieceSquare("YBO"));
 
             return;
             var list = Square.AllSquares;
