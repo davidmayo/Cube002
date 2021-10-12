@@ -29,7 +29,7 @@ namespace Cube002
             Console.WriteLine("SOLUTION: {0}", sol);
             Console.WriteLine("TIME: {0}", watch.Elapsed);
 
-            Console.WriteLine("G location: {0}",cube.FindPieceSquare("YBO"));
+            Console.WriteLine("G location: {0}",cube.FindPiece("YBO"));
 
             return;
             var list = Square.AllSquares;

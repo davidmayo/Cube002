@@ -3,6 +3,9 @@ using System.Drawing;
 
 namespace Cube002
 {
+    /// <summary>
+    /// The colors to use when printing the Cube
+    /// </summary>
     struct Colors
     {
         public static readonly Color White       = ColorTranslator.FromHtml("#FFFFFF");

@@ -4,6 +4,10 @@ using System.Text;
 
 namespace Cube002
 {
+    /// <summary>
+    /// Class to validate cubies
+    /// Work in progress.
+    /// </summary>
     class Cubie
     {
         public Type Type { get => type; }

@@ -4,6 +4,11 @@ using System.Text;
 
 namespace Cube002
 {
+    /// <summary>
+    /// Generate solution
+    /// 
+    /// Work in progress
+    /// </summary>
     class Solution
     {
         public List<Move> moveList;
@@ -73,10 +78,10 @@ namespace Cube002
             string destinationSide = pieceString.Substring(1, 1);
             
 
-            Square pieceSquare_ = cube.FindPieceSquare(pieceString);
+            Square pieceSquare_ = cube.FindPiece(pieceString);
 
             // Prep: Rotate cube so white is U and the side being solved is F
-            while (!Square.IsSamePiece(Square.F, cube.FindPieceSquare(destinationSide)))
+            while (!Square.IsSamePiece(Square.F, cube.FindPiece(destinationSide)))
             {
                 move = new Move("y");
                 algorithmMoves.Add(move);
@@ -84,7 +89,7 @@ namespace Cube002
                 Console.WriteLine("Making move [{0}].", move);
             }
 
-            pieceSquare_ = cube.FindPieceSquare(pieceString);
+            pieceSquare_ = cube.FindPiece(pieceString);
 
             bool isAlreadySolved = false;
             bool isInBottomLayer = Square.IsBottomLayer( pieceSquare_ );
@@ -98,7 +103,7 @@ namespace Cube002
 
 
                 // Rotate D to put target below destination center square
-                while( !Square.IsSamePiece(Square.FD, cube.FindPieceSquare(pieceString)))
+                while( !Square.IsSamePiece(Square.FD, cube.FindPiece(pieceString)))
                 {
                     move = new Move("D");
                     algorithmMoves.Add(move);
@@ -127,7 +132,7 @@ namespace Cube002
             else if( isInMiddleLayer )
             {
                 // Rotate cube so white is U and piece is in FR slot
-                while( !Square.IsSamePiece(Square.FR,cube.FindPieceSquare(pieceString)))
+                while( !Square.IsSamePiece(Square.FR,cube.FindPiece(pieceString)))
                 {
                     move = new Move("y");
                     algorithmMoves.Add(move);
@@ -135,7 +140,7 @@ namespace Cube002
                     Console.WriteLine("Making move [{0}].", move);
                 }
 
-                pieceSquare_ = cube.FindPieceSquare(pieceString);
+                pieceSquare_ = cube.FindPiece(pieceString);
                 bool whiteSideFront = Square.IsFace('F', pieceSquare_);
 
                 if(whiteSideFront)
@@ -167,7 +172,7 @@ namespace Cube002
             else
             {
                 // Rotate cube so piece is in UF position
-                while (!Square.IsSamePiece(Square.UF, cube.FindPieceSquare(pieceString)))
+                while (!Square.IsSamePiece(Square.UF, cube.FindPiece(pieceString)))
                 {
                     move = new Move("y");
                     algorithmMoves.Add(move);
@@ -175,7 +180,7 @@ namespace Cube002
                     Console.WriteLine("Making move [{0}].", move);
                 }
 
-                pieceSquare_ = cube.FindPieceSquare(pieceString);
+                pieceSquare_ = cube.FindPiece(pieceString);
 
                 // Piece is oriented if white side is U
                 bool isOriented = Square.IsFace('U', pieceSquare_);
@@ -219,7 +224,7 @@ namespace Cube002
         private void MoveCubeToStandardOrientation()
         {
             // Move white side to UP
-            Square whiteSquare = cube.FindPieceSquare("W");
+            Square whiteSquare = cube.FindPiece("W");
 
             Move whiteOrientationMove;
             
@@ -248,7 +253,7 @@ namespace Cube002
 
 
             // Move green side to FRONT
-            Square greenSquare = cube.FindPieceSquare("G");
+            Square greenSquare = cube.FindPiece("G");
 
             Move greenOrientationMove;
             if (greenSquare == Square.F)

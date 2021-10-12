@@ -1,12 +1,19 @@
-﻿using System;
+﻿// A class to print arbitrary colors to the Console using ANSI escape codes
+// This does NOT work in cmd.exe, but it does work in Windows Terminal and in the Visual Studio console
+
+using System;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace Cube002
 {
-    class Ansi
+    class AnsiColor
     {
+        public static void Print(string text, Color? foreground = null, Color? background = null)
+        {
+            Console.Write(Convert(text, foreground, background));
+        }
         public static void Print(string text)
         {
             Console.Write(text);
@@ -15,14 +22,8 @@ namespace Cube002
         {
             Console.Write(text + "\n");
         }
-        public static string Convert(string str)
-        {
-            return str;
-        }
-        public static void Print(string text, Color? foreground = null, Color? background = null)
-        {
-            Console.Write(Convert(text, foreground, background));
-        }
+        
+        
 
         public static void PrintLine(string text, Color? foreground = null, Color? background = null)
         {
@@ -38,7 +39,10 @@ namespace Cube002
         {
             Console.Write(Convert(text, foregroundHex, backgroundHex));
         }
-
+        public static string Convert(string str)
+        {
+            return str;
+        }
         public static string Convert(string text, string foregroundHex = null, string backgroundHex = null)
         {
             Color? foreground;
@@ -72,7 +76,6 @@ namespace Cube002
 
             return Convert(text, foreground, background);
         }
-
 
         public static string Convert(string text, Color? foreground = null, Color? background = null)
         {

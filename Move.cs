@@ -6,8 +6,14 @@ namespace Cube002
 {
     class Move
     {
+        /// <summary>
+        /// The Square cycles that will implement this move
+        /// </summary>
         public List<Square[]> Cycles { get => cycles; }
 
+        /// <summary>
+        /// The given 
+        /// </summary>
         private string moveString;
 
         // Face turns
