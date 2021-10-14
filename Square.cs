@@ -138,7 +138,7 @@ namespace Cube002
         {
             return IsCorner(this);
         }
-
+        
         // Upper face
         public static Square UBL = new Square( 0, "UBL", Type.Corner);
         public static Square UBR = new Square( 2, "UBR", Type.Corner);
@@ -236,7 +236,7 @@ namespace Cube002
         public static Square DLB = DBL;
         public static Square DRB = DBR;
 
-        private static List<Square> allSquares = new List<Square>() {
+        private static readonly List<Square> allSquares = new List<Square>() {
             UBL, UBR, UFL, UFR, UB, UL, UR, UF, U,
             FUL, FUR, FDL, FDR, FU, FL, FR ,FD, F,
             RUF, RUB, RFD, RBD, RU, RF, RB, RD, R,

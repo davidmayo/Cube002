@@ -25,11 +25,17 @@ namespace Cube002
 
             // First layer
             SolveWhiteCross();
+            SolveWhiteCorners();
 
             // Second layer
             SolveMiddleLayerEdges();
 
             // Final layer
+        }
+
+        private void SolveWhiteCorners()
+        {
+            // TODO
         }
 
         private void SolveMiddleLayerEdges()
