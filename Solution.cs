@@ -49,11 +49,30 @@ namespace Cube002
             return string.Join(' ', moveList);
         }
 
-        private static List<Move> RemoveReduncantMoves(List<Move> moves)
+        private void AddMoveToSolution( Move move, string caption = "", string longCaption = "")
         {
-            // TODO
-            return moves;
+            moveList.Add(move);
+            Console.WriteLine("Making move {0,-2}: {1}", move, caption);
+            cube.MakeMove(move);
         }
+
+        private void AddMoveToSolution(MoveSequence moves, string caption = "", string longCaption = "")
+        {
+            foreach (Move move in moves.Moves)
+            {
+                AddMoveToSolution( move, caption, longCaption);
+            }
+        }
+
+        private void AddMoveToSolution(string moveString, string caption = "", string longCaption = "")
+        {
+            MoveSequence moves = new MoveSequence(moveString);
+            foreach (Move move in moves.Moves)
+            {
+                AddMoveToSolution(move, caption, longCaption);
+            }
+        }
+
 
         private void SolveWhiteCross()
         {
@@ -78,7 +97,6 @@ namespace Cube002
                 algorithmMoves.AddRange(prepMoves);
             }
 
-            Move move;
 
             // A string like "G";
             string destinationSide = pieceString.Substring(1, 1);
@@ -89,10 +107,7 @@ namespace Cube002
             // Prep: Rotate cube so white is U and the side being solved is F
             while (!Square.IsSamePiece(Square.F, cube.FindPiece(destinationSide)))
             {
-                move = new Move("y");
-                algorithmMoves.Add(move);
-                cube.MakeMove(move);
-                Console.WriteLine("Making move [{0}].", move);
+                AddMoveToSolution("y", "Rotating so green side is in front");
             }
 
             pieceSquare_ = cube.FindPiece(pieceString);
@@ -111,27 +126,17 @@ namespace Cube002
                 // Rotate D to put target below destination center square
                 while( !Square.IsSamePiece(Square.FD, cube.FindPiece(pieceString)))
                 {
-                    move = new Move("D");
-                    algorithmMoves.Add(move);
-                    cube.MakeMove(move);
-                    Console.WriteLine("Making move [{0}].", move);
+                    AddMoveToSolution("D", $"Rotating D until {pieceString} edge piece is in FRONT-DOWN position");
                 }
 
                 if ( !isOriented )
                 {
-                    // Do an F2 to place edge
-                    move = new Move("D R F' R'");
-                    algorithmMoves.Add(move);
-                    cube.MakeMove(move);
-                    Console.WriteLine("Making move [{0}].", move);
+                    AddMoveToSolution("D R F' R'", $"Flip {pieceString} piece and put it into FRONT-UP position.");
                 }
                 else
                 {
                     // Do an F2 to place edge
-                    move = new Move("F2");
-                    algorithmMoves.Add(move);
-                    cube.MakeMove(move);
-                    Console.WriteLine("Making move [{0}].", move);
+                    AddMoveToSolution("F2", $"Put {pieceString} piece into FRONT-UP position.");
                 }
             }
 
@@ -140,10 +145,7 @@ namespace Cube002
                 // Rotate cube so white is U and piece is in FR slot
                 while( !Square.IsSamePiece(Square.FR,cube.FindPiece(pieceString)))
                 {
-                    move = new Move("y");
-                    algorithmMoves.Add(move);
-                    cube.MakeMove(move);
-                    Console.WriteLine("Making move [{0}].", move);
+                    AddMoveToSolution("y", $"Rotate until {pieceString} edge is in FRONT-RIGHT location.");
                 }
 
                 pieceSquare_ = cube.FindPiece(pieceString);
@@ -151,11 +153,7 @@ namespace Cube002
 
                 if(whiteSideFront)
                 {
-                    // Do R' D' R to place piece in bottom layer, properly oriented
-                    move = new Move("R' D' R");
-                    algorithmMoves.Add(move);
-                    cube.MakeMove(move);
-                    Console.WriteLine("Making move [{0}].", move);
+                    AddMoveToSolution("R' D' R", $"I THINK THIS IS WRONG");
 
                     // Call this function recursively
                     SolveWhiteCrossPiece(pieceString, destinationSquareIndex, algorithmMoves);
@@ -164,10 +162,7 @@ namespace Cube002
                 else
                 {
                     // Do F D F' to place piece in bottom layer, properly oriented
-                    move = new Move("F D F'");
-                    algorithmMoves.Add(move);
-                    cube.MakeMove(move);
-                    Console.WriteLine("Making move [{0}].", move);
+                    AddMoveToSolution("F D F'", $"Place {pieceString} edge into BOTTOM layer, properly oriented.");
 
                     // Call this function recursively
                     SolveWhiteCrossPiece(pieceString, destinationSquareIndex, algorithmMoves);
@@ -180,10 +175,7 @@ namespace Cube002
                 // Rotate cube so piece is in UF position
                 while (!Square.IsSamePiece(Square.UF, cube.FindPiece(pieceString)))
                 {
-                    move = new Move("y");
-                    algorithmMoves.Add(move);
-                    cube.MakeMove(move);
-                    Console.WriteLine("Making move [{0}].", move);
+                    AddMoveToSolution("y", $"Rotate cube until {pieceString} edge is in UPPER-FRONT position.");
                 }
 
                 pieceSquare_ = cube.FindPiece(pieceString);
@@ -201,10 +193,7 @@ namespace Cube002
                     else
                     {
                         // Solve the edge with F2
-                        move = new Move("F2");
-                        algorithmMoves.Add(move);
-                        cube.MakeMove(move);
-                        Console.WriteLine("Making move [{0}].", move);
+                        AddMoveToSolution("F2", $"Solve {pieceString} edge in UPPER-FRONT position.");
 
                         // Call this function recursively
                         SolveWhiteCrossPiece(pieceString, destinationSquareIndex, algorithmMoves);
@@ -213,10 +202,7 @@ namespace Cube002
                 else
                 {
                     // Do F R' D' R to put piece in bottom layer correctly oriented
-                    move = new Move("F R' D' R");
-                    algorithmMoves.Add(move);
-                    cube.MakeMove(move);
-                    Console.WriteLine("Making move [{0}].", move);
+                    AddMoveToSolution("F R' D' R", $"Move {pieceString} edge to bottom layer, properly oriented");
 
                     // Call this function recursively
                     SolveWhiteCrossPiece(pieceString, destinationSquareIndex, algorithmMoves);
@@ -232,58 +218,45 @@ namespace Cube002
             // Move white side to UP
             Square whiteSquare = cube.FindPiece("W");
 
-            Move whiteOrientationMove;
-            
+            //Move whiteOrientationMove;
+
             if (whiteSquare == Square.U)
             {
-                whiteOrientationMove = new Move("");
+                //whiteOrientationMove = new SingleMove("");
+                //AddMoveToSolution("");
             }
             else if (whiteSquare == Square.F)
-                whiteOrientationMove = new Move("x");
+                AddMoveToSolution("x", "Rotate cube to put WHITE face UP");
             else if (whiteSquare == Square.R)
-                whiteOrientationMove = new Move("z'");
+                AddMoveToSolution("z'", "Rotate cube to put WHITE face UP");
             else if (whiteSquare == Square.B)
-                whiteOrientationMove = new Move("x'");
+                AddMoveToSolution("x'", "Rotate cube to put WHITE face UP");
             else if (whiteSquare == Square.L)
-                whiteOrientationMove = new Move("z");
+                AddMoveToSolution("z", "Rotate cube to put WHITE face UP");
             else if (whiteSquare == Square.D)
-                whiteOrientationMove = new Move("x2");
+                AddMoveToSolution("x2", "Rotate cube to put WHITE face UP");
             else
                 throw new Exception("Unable to find white center.");    // SHould never happen - FindPiece() would have thrown.
-
-            // Add move to list
-            moveList.Add(whiteOrientationMove);
-
-            // Do the move
-            cube.MakeMove(whiteOrientationMove);
-
 
             // Move green side to FRONT
             Square greenSquare = cube.FindPiece("G");
 
-            Move greenOrientationMove;
             if (greenSquare == Square.F)
             {
-                greenOrientationMove = new Move("");
+                AddMoveToSolution("");
             }
             else if (greenSquare == Square.R)
-                greenOrientationMove = new Move("y");
+                AddMoveToSolution("y", "Rotate cube to put GREEN face FRONT");
             else if (greenSquare == Square.B)
-                greenOrientationMove = new Move("y2");
+                AddMoveToSolution("y2", "Rotate cube to put GREEN face FRONT");
             else if (greenSquare == Square.L)
-                greenOrientationMove = new Move("y'");
+                AddMoveToSolution("y'", "Rotate cube to put GREEN face FRONT");
             else if (greenSquare == Square.D)
                 throw new Exception("Green center can't be down if white is up.");
             else if (greenSquare == Square.U)
                 throw new Exception("Green center can't be up if white is up.");
             else
                 throw new Exception("Unable to find green center.");    // Should never happen - FindPiece() would have thrown.
-
-            // Add move to list
-            moveList.Add(greenOrientationMove);
-
-            // Do the move
-            cube.MakeMove(greenOrientationMove);
         }
     }
 }

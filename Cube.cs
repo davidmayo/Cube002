@@ -216,9 +216,23 @@ namespace Cube002
         /// Actually transform the Cube object
         /// </summary>
         /// <param name="move"></param>
-        public void MakeMove( Move move )
+        //public void MakeMove( Move move )
+        //{
+        //    MakeMove(move.Cycles);
+        //}
+
+        public void MakeMove(Move move )
         {
             MakeMove(move.Cycles);
+        }
+
+        public void MakeMove(MoveSequence moves )
+        {
+            foreach( Move move in moves.Moves)
+            {
+                ;
+                MakeMove(move);
+            }
         }
 
         /// <summary>
@@ -239,10 +253,10 @@ namespace Cube002
         /// <param name="moveString"></param>
         public void MakeMove(string moveString)
         {
-            Move move = new Move(moveString);
+            MoveSequence moves = new MoveSequence(moveString);
             
-            foreach (var cycle in move.Cycles)
-                CycleSquares(cycle);
+            foreach (Move move in moves.Moves)
+                MakeMove( move);
         }
 
         public override string ToString()

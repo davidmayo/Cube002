@@ -24,7 +24,7 @@ namespace Cube002
         {
         }
 
-        public AnnotatedMove( Move move ) : this( move, "", "" )
+        public AnnotatedMove(Move move ) : this( move, "", "" )
         {
         }
 

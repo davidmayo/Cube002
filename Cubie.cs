@@ -15,34 +15,34 @@ namespace Cube002
         public string SquareColorString { get => squareColorString; }
         public string PieceID { get => pieceID; }
 
-        public static Cubie C0  = new Cubie("WOB");
-        public static Cubie C1  = new Cubie("WBR");
-        public static Cubie C2  = new Cubie("WRG");
-        public static Cubie C3  = new Cubie("WGO");
-        public static Cubie C4  = new Cubie("YGR");
-        public static Cubie C5  = new Cubie("YRB");
-        public static Cubie C6  = new Cubie("YBO");
-        public static Cubie C7  = new Cubie("YOG");
+        public static Cubie cor0  = new Cubie("WOB");
+        public static Cubie cor1  = new Cubie("WBR");
+        public static Cubie cor2  = new Cubie("WRG");
+        public static Cubie cor3  = new Cubie("WGO");
+        public static Cubie cor4  = new Cubie("YGR");
+        public static Cubie cor5  = new Cubie("YRB");
+        public static Cubie cor6  = new Cubie("YBO");
+        public static Cubie cor7  = new Cubie("YOG");
         
-        public static Cubie E0  = new Cubie("WB");
-        public static Cubie E1  = new Cubie("WR");
-        public static Cubie E2  = new Cubie("WG");
-        public static Cubie E3  = new Cubie("WO");
-        public static Cubie E4  = new Cubie("GO");
-        public static Cubie E5  = new Cubie("GR");
-        public static Cubie E6  = new Cubie("BR");
-        public static Cubie E7  = new Cubie("BO");
-        public static Cubie E8  = new Cubie("YG");
-        public static Cubie E9  = new Cubie("YR");
-        public static Cubie E10 = new Cubie("YB");
-        public static Cubie E11 = new Cubie("YO");
+        public static Cubie edg00  = new Cubie("WB");
+        public static Cubie edg01  = new Cubie("WR");
+        public static Cubie edg02  = new Cubie("WG");
+        public static Cubie edg03  = new Cubie("WO");
+        public static Cubie edg04  = new Cubie("GO");
+        public static Cubie edg05  = new Cubie("GR");
+        public static Cubie edg06  = new Cubie("BR");
+        public static Cubie edg07  = new Cubie("BO");
+        public static Cubie edg08  = new Cubie("YG");
+        public static Cubie edg09  = new Cubie("YR");
+        public static Cubie edg10 = new Cubie("YB");
+        public static Cubie edg11 = new Cubie("YO");
 
-        public static Cubie F0  = new Cubie("W");
-        public static Cubie F1  = new Cubie("G");
-        public static Cubie F2  = new Cubie("R");
-        public static Cubie F3  = new Cubie("B");
-        public static Cubie F4  = new Cubie("L");
-        public static Cubie F5  = new Cubie("D");
+        public static Cubie cen0  = new Cubie("W");
+        public static Cubie cen1  = new Cubie("G");
+        public static Cubie cen2  = new Cubie("R");
+        public static Cubie cen3  = new Cubie("B");
+        public static Cubie cen4  = new Cubie("L");
+        public static Cubie cen5  = new Cubie("D");
 
         private List<char> sides;
         private Type type;
@@ -112,60 +112,60 @@ namespace Cube002
 
         private void ClassifyCubie()
         {
-            if (this == C0)
-                pieceID = "C0";
-            else if (this == C1)
-                pieceID = "C1";
-            else if (this == C2)
-                pieceID = "C2";
-            else if (this == C3)
-                pieceID = "C3";
-            else if (this == C4)
-                pieceID = "C4";
-            else if (this == C5)
-                pieceID = "C5";
-            else if (this == C6)
-                pieceID = "C6";
-            else if (this == C7)
-                pieceID = "C7";
+            if (this == cor0)
+                pieceID = "cor0";
+            else if (this == cor1)
+                pieceID = "cor1";
+            else if (this == cor2)
+                pieceID = "cor2";
+            else if (this == cor3)
+                pieceID = "cor3";
+            else if (this == cor4)
+                pieceID = "cor4";
+            else if (this == cor5)
+                pieceID = "cor5";
+            else if (this == cor6)
+                pieceID = "cor6";
+            else if (this == cor7)
+                pieceID = "cor7";
 
-            else if (this == E0)
-                pieceID = "E0";
-            else if (this == E1)
-                pieceID = "E1";
-            else if (this == E2)
-                pieceID = "E2";
-            else if (this == E3)
-                pieceID = "E3";
-            else if (this == E4)
-                pieceID = "E4";
-            else if (this == E5)
-                pieceID = "E5";
-            else if (this == E6)
-                pieceID = "E6";
-            else if (this == E7)
-                pieceID = "E7";
-            else if (this == E8)
-                pieceID = "E8";
-            else if (this == E9)
-                pieceID = "E9";
-            else if (this == E10)
-                pieceID = "E10";
-            else if (this == E11)
-                pieceID = "E11";
+            else if (this == edg00)
+                pieceID = "edg00";
+            else if (this == edg01)
+                pieceID = "edg01";
+            else if (this == edg02)
+                pieceID = "edg02";
+            else if (this == edg03)
+                pieceID = "edg03";
+            else if (this == edg04)
+                pieceID = "edg04";
+            else if (this == edg05)
+                pieceID = "edg05";
+            else if (this == edg06)
+                pieceID = "edg06";
+            else if (this == edg07)
+                pieceID = "edg07";
+            else if (this == edg08)
+                pieceID = "edg08";
+            else if (this == edg09)
+                pieceID = "edg09";
+            else if (this == edg10)
+                pieceID = "edg10";
+            else if (this == edg11)
+                pieceID = "edg11";
 
-            else if (this == F0)
-                pieceID = "F0";
-            else if (this == F1)
-                pieceID = "F1";
-            else if (this == F2)
-                pieceID = "F2";
-            else if (this == F3)
-                pieceID = "F3";
-            else if (this == F4)
-                pieceID = "F4";
-            else if (this == F5)
-                pieceID = "F5";
+            else if (this == cen0)
+                pieceID = "cen0";
+            else if (this == cen1)
+                pieceID = "cen1";
+            else if (this == cen2)
+                pieceID = "cen2";
+            else if (this == cen3)
+                pieceID = "cen3";
+            else if (this == cen4)
+                pieceID = "cen4";
+            else if (this == cen5)
+                pieceID = "cen5";
 
             else
             {

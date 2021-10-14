@@ -31,21 +31,38 @@ namespace Cube002
 
             Console.WriteLine("G location: {0}",cube.FindPiece("YBO"));
 
-            return;
-            var list = Square.AllSquares;
+            //Move move1 = new Move("R2");
 
-            foreach( var square in list )
-            {
-                int num = square;
-                Console.WriteLine("{0} [num={5,-2}]   face={1}   top={2,-5}   middle={3,-5}   bottom={4,-5}", square, square.GetFace(), square.IsTopLayer(), square.IsMiddleLayer(), square.IsBottomLayer(), num);
-                var others = square.GetAllPieceSquares();
+            //Move move2 = new Move("R2");
 
-                foreach (var other in others)
-                    Console.WriteLine("  OTHER: {0}", other);
-            }
+            ///Move move3 = Sequence.CombineMoves(move1, move2);
 
-            Cubie cubie = Cubie.C0;
-            Console.WriteLine(cubie);
+            //Console.WriteLine("{0} + {1} = {2}", move1, move2, move3);
+
+            //Sequence seq = new Sequence(new Move("R U R' U'"));
+            ;
+            //Console.WriteLine("SEQ: {0}    LEN: {1}",seq, seq.Length);
+
+            cube = new Cube();
+            cube.WriteColoredCube();
+
+            Move sm = new Move("R'");
+
+
+
+            MoveSequence mm = new MoveSequence("R R F U U U U D U");
+            //mm = new MultipleMoves("R R");
+            Console.WriteLine("Making moves: {0}", mm);
+            mm.RemoveRedundancy();
+            Console.WriteLine("After removing redundancy: {0}", mm);
+            Console.WriteLine("Inverse sequence: {0}", mm.GetInverseSequenced());
+
+            ;
+
+            cube.MakeMove(mm);
+            
+            cube.WriteColoredCube();
+            
         }
     }
 }
