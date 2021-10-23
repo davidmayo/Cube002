@@ -15,10 +15,10 @@ namespace Cube002
         public Cube cube;
         public Cube initialCube;
 
-        private static readonly bool debugToConsole = true;
+        private static readonly bool debugToConsole = false;
         public Solution( Cube cube )
         {
-            this.cube = cube;
+            this.cube = cube.Copy();
             initialCube = new Cube(cube.ToCanonicalString());
             moveList = new List<Move>();
 
@@ -184,14 +184,21 @@ namespace Cube002
         private void OrientYellowCorners()
         {
             // Flip cube so YELLOW is DOWN
-            // TODO
-
-
+            if( cube[Square.D] == 'Y')
+            {
+                ; // Do nothing
+            }
+            else if( cube[Square.D] == 'W')
+            {
+                AddMoveToSolution("x2", "Move YELLOW face to DOWN");
+            }
+            else
+            {
+                throw new Exception("Invalid cube orientation. DOWN is " + cube[Square.D]);
+            }
 
             // Find count of unsolved corners
-            // TODO
-            int unsolvedCorners = 4;
-
+            int unsolvedCorners = 0;
             for ( int rotationCount = 0; rotationCount < 4; rotationCount++)
             {
                 AddMoveToSolution("y", "Rotate cube looking for solved DFR corners [This will be optimized away].");
@@ -213,31 +220,35 @@ namespace Cube002
             }
             else
             {
-                // Determine if DFR is solved
-                // TODO
-                bool isDFRsolved = false;
-                isDFRsolved = IsDFRsolved();
+                /*
+                 * There are unsolved corners, and they all have to be solved at basically the same time
+                 * 
+                 * The method:
+                 *    Iterate over all four corners, moving them into the DFR position one by one.
+                 *       Orient DFR corner, even though it disrupts rest of cube. It will be fixed by the end.
+                 *       Do D turn
+                 *    Cube will now be solved, excet for possibly a D turn
+                 *    Do final turn, if necessary
+                 */ 
 
-                // Rotate
-
-
-                if( isDFRsolved )
+                // Iterate over the corners
+                for( int cornerCount = 0; cornerCount < 4; cornerCount++)
                 {
-                    // Rotate B (Note: Rotate B, NOT y!!!!)
-                    // TODO
-                }
-                else
-                {
-                    // Do R U R' U' until DFR is solved
-                    while ( ! isDFRsolved )
+                    // If DFR is not solved, do R U R' U' until it is.
+                    while( !IsDFRsolved() )
                     {
-                        // Do R U R' U' 
-                        AddMoveToSolution("R U R' U'", "Do four move sequence until the corner is solved");
-
-                        // Determine if DFR is solved
-                        // TODO
-                        isDFRsolved = IsDFRsolved();
+                        // If DFR is not solved, do R U R' U' until it is.
+                        AddMoveToSolution("R U R' U'", "Keep doing four move sequence until the FRONT RIGHT corner is solved");
                     }
+
+                    // Rotate D to stage the next corner
+                    AddMoveToSolution("D", "Rotate the DOWN layer until the next unsolved piece is in the FRONT RIGHT corner");
+                }
+
+                // Do final D turn, if necessary
+                while(cube[Square.F] != cube[Square.FD])
+                {
+                    AddMoveToSolution("D", "Rotate the DOWN layer until the next unsolved piece is in the FRONT RIGHT corner");
                 }
             }
         }

@@ -245,6 +245,14 @@ namespace Cube002
             MakeMove(move.Cycles);
         }
 
+        public void MakeMove(List<Move> moves)
+        {
+            foreach( Move move in moves)
+            {
+                MakeMove(move);
+            }
+        }
+
         public void MakeMove(MoveSequence moves )
         {
             foreach( Move move in moves.Moves)
@@ -290,6 +298,11 @@ namespace Cube002
         public override int GetHashCode()
         {
             return this.ToString().GetHashCode();
+        }
+
+        public Cube Copy()
+        {
+            return new Cube(this.ToCanonicalString());
         }
 
         /// <summary>
