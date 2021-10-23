@@ -6,7 +6,7 @@ namespace Cube002
     /// <summary>
     /// The colors to use when printing the Cube
     /// </summary>
-    struct Colors
+    struct DisplayColors
     {
         public static readonly Color White       = ColorTranslator.FromHtml("#FFFFFF");
         public static readonly Color Green       = ColorTranslator.FromHtml("#10c443");

@@ -90,7 +90,9 @@ namespace Cube002
             var watch = Stopwatch.StartNew();
             Solution sol = new Solution(cube);
             watch.Stop();
-            sol.cube.WriteColoredCube();
+            //sol.cube.WriteColoredCube();
+            Console.WriteLine("SOLUTION GENERATION TIME: {0}", watch.Elapsed);
+            return;
 
             Console.WriteLine("SOLUTION: {0}", sol);
             Console.WriteLine("TIME: {0}", watch.Elapsed);

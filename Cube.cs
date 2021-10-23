@@ -27,6 +27,25 @@ namespace Cube002
             ProcessCanonicalString(canonicalString);
         }
 
+        /// <summary>
+        /// Get the color of a square
+        /// </summary>
+        /// <param name="square">The square to check</param>
+        /// <returns>char of the color</returns>
+        public char GetSquareColor( Square square )
+        {
+            return squares[square.Index];
+        }
+
+        /// <summary>
+        /// Get the color of a square
+        /// </summary>
+        /// <param name="key">The square to check</param>
+        /// <returns>char of the color</returns>
+        public char this[Square key]
+        {
+            get => squares[key.Index];
+        }
 
         /// <summary>
         /// Get the canonical string, like "WWWWWWWWW/GGGGGGGGG/RRRRRRRRR/BBBBBBBBB/OOOOOOOOO/YYYYYYYYY"
@@ -110,14 +129,14 @@ namespace Cube002
                 if (squares[cornerSquare] == pieceString[0])
                 {
                     // If we find the primary face color, Check the other face on that piece
-                    var otherEdgeSquares = cornerSquare.GetOtherPieceSquares();
+                    var otherCornerSquares = cornerSquare.GetOtherPieceSquares();
 
                     // if the other faces on that piece match the other face colors,
                     // We've found it.
                     // Check both orders
-                    if (squares[otherEdgeSquares[0]] == pieceString[1] && squares[otherEdgeSquares[1]] == pieceString[2])
+                    if (squares[otherCornerSquares[0]] == pieceString[1] && squares[otherCornerSquares[1]] == pieceString[2])
                         return cornerSquare;
-                    else if (squares[otherEdgeSquares[0]] == pieceString[2] && squares[otherEdgeSquares[1]] == pieceString[1])
+                    else if (squares[otherCornerSquares[0]] == pieceString[2] && squares[otherCornerSquares[1]] == pieceString[1])
                         return cornerSquare;
                 }
             }
@@ -159,7 +178,7 @@ namespace Cube002
         /// </summary>
         /// <param name="pieceString">A string like "G"</param>
         /// <returns>The Square where "G" is</returns>
-        public Square FindCenterPiece(string pieceString)
+        private Square FindCenterPiece(string pieceString)
         {
             List<Square> centerSquares = Square.AllCenterSquares;
 
@@ -230,7 +249,6 @@ namespace Cube002
         {
             foreach( Move move in moves.Moves)
             {
-                ;
                 MakeMove(move);
             }
         }
@@ -311,7 +329,7 @@ namespace Cube002
         /// </summary>
         public void WriteColoredCube()
         {
-            if (Console.CursorLeft == 0)
+            if (Console.CursorLeft != 0)
                 Console.WriteLine();
 
             string netString = ToNetString();
@@ -373,14 +391,14 @@ namespace Cube002
                 {
                     foreground = ch switch
                     {
-                        'W' => Colors.White,
-                        'G' => Colors.Green,
-                        'R' => Colors.Red,
-                        'B' => Colors.Blue,
-                        'O' => Colors.Orange,
-                        'Y' => Colors.Yellow,
-                        'X' => Colors.Unspecified,
-                        _ => Colors.Default
+                        'W' => DisplayColors.White,
+                        'G' => DisplayColors.Green,
+                        'R' => DisplayColors.Red,
+                        'B' => DisplayColors.Blue,
+                        'O' => DisplayColors.Orange,
+                        'Y' => DisplayColors.Yellow,
+                        'X' => DisplayColors.Unspecified,
+                        _ => DisplayColors.Default
                     };
                 }
                 else
