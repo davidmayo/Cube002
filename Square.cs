@@ -32,6 +32,51 @@ namespace Cube002
             }
         }
 
+        public static List<List<Square>> AllPieces
+        {
+            get
+            {
+                List<List<Square>> allPieces = new List<List<Square>>()
+                {
+                    // Centers
+                    new List<Square>() {Square.U},
+                    new List<Square>() {Square.F},
+                    new List<Square>() {Square.R},
+                    new List<Square>() {Square.B},
+                    new List<Square>() {Square.L},
+                    new List<Square>() {Square.D},
+
+                    // Edges
+                    new List<Square>() {Square.UF, Square.FU},
+                    new List<Square>() {Square.UR, Square.RU},
+                    new List<Square>() {Square.UB, Square.BU},
+                    new List<Square>() {Square.UL, Square.LU},
+
+                    new List<Square>() {Square.FR, Square.RF},
+                    new List<Square>() {Square.BR, Square.RB},
+                    new List<Square>() {Square.FL, Square.LF},
+                    new List<Square>() {Square.BL, Square.LB},
+
+                    new List<Square>() {Square.DF, Square.FD},
+                    new List<Square>() {Square.DR, Square.RD},
+                    new List<Square>() {Square.DB, Square.BD},
+                    new List<Square>() {Square.DL, Square.LD },
+
+                    // Corners
+                    new List<Square>() {Square.UFR, Square.RUF, Square.FUR},
+                    new List<Square>() {Square.UBR, Square.BUR, Square.RUB},
+                    new List<Square>() {Square.UFL, Square.FUL, Square.LUF},
+                    new List<Square>() {Square.UBL, Square.LUB, Square.BUL},
+
+                    new List<Square>() {Square.DFR, Square.FDR, Square.RDF},
+                    new List<Square>() {Square.DBR, Square.RDB, Square.BDR},
+                    new List<Square>() {Square.DFL, Square.LDF, Square.FDL},
+                    new List<Square>() {Square.DBL, Square.BDL, Square.LDB},
+                };
+                return allPieces;
+            }
+        }
+
         public override string ToString()
         {
             return string.Format("{0,-3} [index {1,2}]", this.Location, this.Index, this.Type);

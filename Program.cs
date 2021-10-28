@@ -105,6 +105,18 @@ namespace Cube002
             Console.WriteLine("\nCube after applying solution:");
             cube.WriteColoredCube();
 
+            string str = "BOY";
+            string str2 = "BYO";
+            for( int i = -5; i < 5; i++)
+            {
+                string rotated = PieceValidator.RotateString(str2, i);
+                bool equal = PieceValidator.AreEquivalentUnderRotation(str, rotated);
+
+                Console.WriteLine($"Shifting {str2} by {i} yields {rotated}. AreIdentical to BOY={equal}");
+            }
+
+            PieceValidator pv = new PieceValidator(cube);
+
             return;
         }
     }
