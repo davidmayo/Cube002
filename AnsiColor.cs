@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace Cube002
+namespace LogicalCube
 {
     class AnsiColor
     {

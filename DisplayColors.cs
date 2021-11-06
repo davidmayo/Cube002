@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace Cube002
+namespace LogicalCube
 {
     /// <summary>
     /// The colors to use when printing the Cube

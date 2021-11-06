@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 
-namespace Cube002
+namespace LogicalCube
 {
     class PieceValidator
     {

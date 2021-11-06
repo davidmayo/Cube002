@@ -2,24 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Cube002
+namespace LogicalCube
 {
     class SolutionTest
     {
-
         public static IEnumerable<string> GenerateScramblesEnumerable(int count = 100, int scrambleLength = 100, int seed = 0)
         {
             Random rand = new Random(seed);
 
-            HashSet<int> dummy = new HashSet<int>();
-
             for (int i = 0; i < count; i++)
-                dummy.Add(i);
-
-            foreach (int integer in dummy)
-            {
                 yield return GenerateRandomScramble(scrambleLength, rand);
-            }
         }
         public static List<string> GenerateScrambles(int count = 100, int scrambleLength = 10000, int seed = 0)
         {
