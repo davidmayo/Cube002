@@ -330,12 +330,12 @@ namespace Cube002
         }
 
         /// <summary>
-        /// Determine if two strings are equivalent after rotating through some number of positions. So "BOY" is ewquivalent to "OYB" but not "BYO"
+        /// Determine if two strings are equivalent after rotating through some number of positions. So "BOY" is equivalent to "OYB" but not "BYO"
         /// </summary>
         /// <param name="string1"></param>
         /// <param name="string2"></param>
         /// <returns></returns>
-        public static bool AreEquivalentUnderRotation(string string1, string string2)
+        public static bool EqualsUnderRotation(string string1, string string2)
         {
             if (string1.Length != string2.Length)
                 return false;

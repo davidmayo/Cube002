@@ -73,7 +73,7 @@ namespace Cube002
             canonicalString = canonicalString.Replace("/", "").ToUpper();
             if (canonicalString.Length != 54)
             {
-                throw new ArgumentException("String must have 54 letters");
+                throw new ArgumentException("String must have 54 letters: " + canonicalString);
             }
 
             foreach (char ch in canonicalString.ToCharArray())
